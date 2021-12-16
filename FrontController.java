@@ -1,41 +1,64 @@
 package webpos;
 
 import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import beans.Action;
+import services.auth.Authentication;
 
-@WebServlet("/Access")
+
+@WebServlet({"/Access","/AccessOut"})
 public class FrontController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    
-    public FrontController() {
-        super();
-        
-    }
-
 	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("Get 방식으로 전송");
-		//esponse.getWriter().append("Served at: ").append(request.getContextPath());
+
+	public FrontController() {
+		super();
+
 	}
 
-	
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		this.doProcess(request,response);	
+
+	}
+
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		System.out.println(request.getParameter("mId"));
-//		System.out.println(request.getParameter("mPassword"));
-		//doGet(request, response);
-		// id --  hoonzzang pwd - 1234 --> main.jsp
-		//							x --> index.html
-		if(request.getParameter("mId").equals("hoonzzang")&&request.getParameter("mPassword").equals("1234")) {
-			response.sendRedirect("main.jsp");
+		request.setCharacterEncoding("UTF-8");
+		this.doProcess(request,response);
+	}
+	private void doProcess(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+		Action action = null;
+		String jobCode = req.getRequestURI().substring(req.getContextPath().length()+1);
+
+		Authentication auth = null;
+		
+		if(jobCode.equals("Access")) {
+			//Auth :: 1
+			auth = new Authentication(req);
+			action = auth.backController(1);
+			
+		}else if(jobCode.equals("AccessOut")){
+			//Auth :: -1
+			auth = new Authentication(req);
+			action =auth.backController(-1);
 		}else {
-			response.sendRedirect("index.html");
+
+		}
+
+		if(action.isRedirect()) {
+			res.sendRedirect(action.getPage());
+		}else {
+			RequestDispatcher dp= req.getRequestDispatcher(action.getPage());
+			dp.forward(req, res);
 		}
 	}
-
 }
