@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Memberlogin :: Scafe</title>
+<script src="resources/resource.js"></script>
+<script>
+
+function authentication(){
+	temp = location.href.split("?");
+	 /*1. HTML 개체와의 연결*/
+	 const form = document.getElementsByName("login")[0];
+	const pSeCode=temp[1];
+	const pSeName=temp[2];
+	const seCode = makeInputElement("hidden","seCode",pSeCode,"");
+	const seName = makeInputElement("hidden","seName",pSeName,"");
+	
+	/*2. 사용자 데이터의 수집*/
+	const userData = [seCode, document.getElementsByName("cuNum")[0], document.getElementsByName("cuPassword")[0]];
+	 
+	const message = [ "USER ID 입력", "패스워드 입력"];
+	/*3. 유효성 검사*/	
+	for(let index=0; index<userData.length; index++){
+		if(!isEmpty(userData[index])){
+			alert(message[index]);
+			return;
+		}
+	}
+	form.appendChild(seCode);
+	/*4. 서버 전송*/
+	form.submit();	
+}
+
+function isEmpty(obj){
+	let check=true;
+	if(obj.value==""){
+		check=false;
+	}
+	return check;
+}
+
+</script>
+</head>
+<style>
+.background{
+    height: 100vh;
+    background-image:url('image001.png');
+    background-repeat : no-repeat;
+    background-size : cover;
+
+}
+.table    {position:absolute; top:50%; left:50%; 
+			transform: translate(-50%, -50%); width:24%;}
+.input	  {height: 36px;width:300px;font-size:18px;border:1px solid #3A4CA8}
+#loginbtn {background-color: #3A4CA8; color:#FFFFFF; height: 100px;width:120px;
+			border:0px solid #0BC904; font-size:24px;text-align:center;
+			 box-shadow : 5px 5px 5px black; transition-duration:0.3s;}
+#loginbtn:active	  {background-color: #3A4CA8; color:#FFFFFF; height: 100px;width:120px;
+			border:0px solid #0BC904; font-size:24px;text-align:center;
+			 box-shadow : none; margin-left:5px; margin-top:5px;
+			}	
+#welcome  {text-align:center;font-size:35px;color: #3A4CA8;}
+</style>
+<body class ="background"><form name ="login" action="Access" method="post">
+<table class ="table">
+	<tr>
+		<td colspan="2" id="welcome">WELCOME!</td>
+		
+	</tr>
+	<tr>
+		<td>
+		<input class = "input" type="text" name="cuNum" placeholder="USER ID(010제외한 번호8자리)"/>
+		</td>
+		<td rowspan="2"><input type="button" id="loginbtn" value="LOGIN" onClick="authentication()"/></td>
+	</tr>
+	<tr>
+		<td>
+		<input class = "input" type="password" name="cuPassword" placeholder="USER PASSWORD"/>
+		</td>
+		
+	</tr>
+	<tr>
+		<td colspan="2" ></td>
+		
+	</tr>
+</table>
+</form>
+</body>
+</html>

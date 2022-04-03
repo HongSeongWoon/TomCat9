@@ -1,0 +1,13 @@
+@charset "UTF-8";
+/*webScafe common.css*/
+
+.cufirstrow {width:200px;height:50px;line-height:50px;
+			 text-align:center;background-color:gray;
+			 color:white; font-size:16pt;}
+#cutable {margin:20px 0 0 20px;}
+.empfirstrow {width:150px;height:50px;line-height:50px;
+			 text-align:center;background-color:gray;
+			 color:white; font-size:16pt;}
+#emptable {margin:20px 0 0 20px;}
+.empContent {text-align:center;}
+.cuContent {text-align:center;}
